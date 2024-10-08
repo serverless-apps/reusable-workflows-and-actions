@@ -22,7 +22,8 @@ jobs:
           role-session-name: test-aws-github-hookup
           aws-region: ${{ env.AWS_REGION }}
       # Upload a file to AWS s3
-      - name:  Copy index.html to s3
+      - name:  Copy index.html to s3 --acl public-read
         run: |
           #  aws s3 mb s3://${{ env.BUCKET_NAME }} --region ${{env.AWS_REGION}}
-          aws s3 cp ./resources/index.html s3://${{ env.BUCKET_NAME }}/
+          sam --version
+          aws s3 cp ./resources/index.html s3://${{ env.BUCKET_NAME }}/ --acl public-read
