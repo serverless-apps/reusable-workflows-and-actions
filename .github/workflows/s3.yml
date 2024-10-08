@@ -2,7 +2,7 @@ name: test s3 actions
 on:
   workflow_dispatch:
 env:
-  BUCKET_NAME : "test-bucket"
+  BUCKET_NAME : "test-github-deploy-workflows"
   AWS_REGION : "us-east-1"
 # permission can be added at job level or workflow level
 permissions:
