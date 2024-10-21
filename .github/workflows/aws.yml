@@ -1,9 +1,16 @@
 name: test s3 actions
 on:
-  workflow_dispatch:
-env:
-  BUCKET_NAME : "test-github-deploy-workflows"
-  AWS_REGION : "us-east-1"
+  workflow_call:
+    secrets: # reusable workflows do not have direct access to secrets, we have to pass them from the caller
+      ROLE_ARN:
+        required: true
+    inputs:
+      BUCKET_NAME:
+        required: true  # if 'required' is 'false', set a default value using default: somevalue
+        type: string
+      AWS_REGION:
+        required: true  # if 'required' is 'false', set a default value using default: somevalue
+        type: string
 # permission can be added at job level or workflow level
 permissions:
   id-token: write   # This is required for requesting the JWT
@@ -16,9 +23,8 @@ jobs:
         uses: actions/checkout@v4
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
-
         with:
-          role-to-assume: arn:aws:iam::553953895366:role/github-deployer
+          role-to-assume: ${{ROLE_ARN}}
           role-session-name: test-aws-github-hookup
           aws-region: ${{ env.AWS_REGION }}
       # Upload a file to AWS s3
